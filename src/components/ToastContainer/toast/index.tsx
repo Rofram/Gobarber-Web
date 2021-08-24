@@ -7,6 +7,7 @@ import * as S from './styles';
 
 interface ToastProps {
   toast: ToastMessage;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   style: any;
 }
 
@@ -30,7 +31,7 @@ const Toast: React.FC<ToastProps> = ({ toast, style }) => {
   }, [removeToast, toast.id]);
 
   return (
-    <S.Container style={style} type={toast.type} hasDescription={!!toast.description}>
+    <S.Container style={style} type={toast.type} hasDescription={Number(!!toast.description)}>
       {icons[toast.type || 'info']}
 
       <div>

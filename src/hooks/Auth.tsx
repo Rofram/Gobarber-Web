@@ -11,7 +11,7 @@ interface ResponseApi {
   //   created_at: string;
   //   updated_at: string;
   // };
-  user: object;
+  user: Record<string, unknown>;
   token: string;
 }
 
@@ -21,7 +21,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: object;
+  user: Record<string, unknown>;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => void;
 }

@@ -3,16 +3,16 @@ import { uuid } from 'uuidv4';
 
 import ToastContainer from '../components/ToastContainer';
 
+interface ToastContextData {
+  addToast: (message: Omit<ToastMessage, 'id'>) => void;
+  removeToast: (id: string) => void;
+}
+
 export interface ToastMessage {
   id: string;
   type?: 'success' | 'error' | 'info';
   title: string;
   description?: string;
-}
-
-interface ToastContextData {
-  addToast: (message: Omit<ToastMessage, 'id'>) => void;
-  removeToast: (id: string) => void;
 }
 
 const ToastContext = createContext<ToastContextData>({} as ToastContextData);

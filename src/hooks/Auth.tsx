@@ -2,16 +2,15 @@ import React, { createContext, useCallback, useContext, useState } from 'react';
 
 import api from '../services/api';
 
-interface ResponseApi {
-  // user: {
-  //   id: string;
-  //   name: string;
-  //   email: string;
-  //   avatar: string;
-  //   created_at: string;
-  //   updated_at: string;
-  // };
-  user: Record<string, unknown>;
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar_url: string;
+}
+
+interface AuthProps {
+  user: User;
   token: string;
 }
 
@@ -21,7 +20,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: Record<string, unknown>;
+  user: User;
   signIn: (credentials: SignInCredentials) => Promise<void>;
   signOut: () => void;
 }
@@ -29,19 +28,21 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [data, setData] = useState<ResponseApi>(() => {
+  const [data, setData] = useState<AuthProps>(() => {
     const token = localStorage.getItem('@Gobarber:token');
     const user = localStorage.getItem('@Gobarber:user');
 
     if (token && user) {
+      api.defaults.headers.authorization = `Bearer ${token}`;
+
       return { token, user: JSON.parse(user) };
     }
 
-    return {} as ResponseApi;
+    return {} as AuthProps;
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const response = await api.post<ResponseApi>('sessions', {
+    const response = await api.post<AuthProps>('sessions', {
       email,
       password,
     });
@@ -51,6 +52,8 @@ export const AuthProvider: React.FC = ({ children }) => {
     localStorage.setItem('@Gobarber:token', token);
     localStorage.setItem('@Gobarber:user', JSON.stringify(user));
 
+    api.defaults.headers.authorization = `Bearer ${token}`;
+
     setData({ token, user });
   }, []);
 
@@ -58,7 +61,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     localStorage.removeItem('@Gobarber:token');
     localStorage.removeItem('@Gobarber:user');
 
-    setData({} as ResponseApi);
+    setData({} as AuthProps);
   }, []);
 
   return (

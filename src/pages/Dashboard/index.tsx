@@ -10,6 +10,7 @@ import { useAuth } from '../../hooks/Auth';
 import * as S from './styles';
 
 import logoImg from '../../assets/Logo.svg';
+import avatarImg from '../../assets/avatar.png';
 import api from '../../services/api';
 
 interface MonthAvailability {
@@ -118,7 +119,7 @@ const Dashboard: React.FC = () => {
     });
   }, [appointments]);
 
-  const nextAppointments = useMemo(() => {
+  const nextAppointment = useMemo(() => {
     return appointments.find((appointment) => isAfter(parseISO(appointment.date), new Date()));
   }, [appointments]);
 
@@ -127,15 +128,8 @@ const Dashboard: React.FC = () => {
       <S.Header>
         <S.HeaderContent>
           <img src={logoImg} alt="logo GoBarber" />
-          <S.Profile>
-            <img
-              src={
-                user.avatar_url
-                  ? user.avatar_url
-                  : 'https://avatars.githubusercontent.com/u/50988834?v=4'
-              }
-              alt="Rodrigo de França"
-            />
+          <S.Profile to="/profile">
+            <img src={user.avatar_url ? user.avatar_url : avatarImg} alt={user.name} />
             <div>
               <span>Bem-vindo</span>
               <strong>{user.name}</strong>
@@ -157,16 +151,16 @@ const Dashboard: React.FC = () => {
             <span>{selectedWeekDayAsText}</span>
           </p>
 
-          {isToday(selectedDate) && nextAppointments && (
+          {isToday(selectedDate) && nextAppointment && (
             <S.NextAppointment>
               <strong>Agendamento a seguir</strong>
               <div>
-                <img src={nextAppointments.user.avatar_url} alt={nextAppointments.user.name} />
+                <img src={nextAppointment.user.avatar_url} alt={nextAppointment.user.name} />
 
-                <strong>{nextAppointments.user.name}</strong>
+                <strong>{nextAppointment.user.name}</strong>
                 <span>
                   <FiClock />
-                  <span>{nextAppointments.hourFormatted}</span>
+                  <span>{nextAppointment.hourFormatted}</span>
                 </span>
               </div>
             </S.NextAppointment>

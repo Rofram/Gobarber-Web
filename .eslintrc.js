@@ -34,10 +34,10 @@ module.exports = {
         'import/no-cycle': 'warn',
         'react/jsx-props-no-spreading': "off",
         "@typescript-eslint/explicit-function-return-type": [
-          "error",
-          {
-            "allowExpressions": true
-          }
+            "error",
+            {
+              "allowExpressions": true
+            }
         ],
         "import/prefer-default-export": 0,
         "camelcase": ["off", {"properties": "never"}],

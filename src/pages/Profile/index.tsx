@@ -70,8 +70,6 @@ const Profile: React.FC = () => {
           ...(oldPassword ? { oldPassword, newPassword, passwordConfirmation } : {}),
         };
 
-        console.log(formData);
-
         const response = await api.put('/profile', formData);
 
         updateUser(response.data);

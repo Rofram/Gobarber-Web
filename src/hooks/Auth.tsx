@@ -26,9 +26,13 @@ interface AuthContextData {
   updateUser: (user: User) => void;
 }
 
+type AuthProviderProps = {
+  children: React.ReactNode;
+};
+
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [data, setData] = useState<AuthProps>(() => {
     const token = localStorage.getItem('@Gobarber:token');
     const user = localStorage.getItem('@Gobarber:user');
@@ -42,7 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthProps;
   });
 
-  const signIn = useCallback(async ({ email, password }) => {
+  const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post<AuthProps>('sessions', {
       email,
       password,
